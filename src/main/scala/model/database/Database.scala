@@ -14,10 +14,9 @@ class Database extends DatabaseAPI{
   var connection: Connection = DriverManager.getConnection(url, username, password)
   setupTable()
 
-
   def setupTable(): Unit = {
     val statement = connection.createStatement()
-    statement.execute("CREATE TABLE IF NOT EXISTS queue (username TEXT, timestamp BIGINT)")
+    statement.execute("CREATE TABLE IF NOT EXISTS queue (username TEXT, timestamp TEXT)")
   }
 
 
@@ -25,7 +24,7 @@ class Database extends DatabaseAPI{
     val statement = connection.prepareStatement("INSERT INTO queue VALUE (?, ?)")
 
     statement.setString(1, student.username)
-    statement.setLong(2, student.timestamp)
+    statement.setString(2, student.timestamp)
 
     statement.execute()
   }
@@ -48,7 +47,7 @@ class Database extends DatabaseAPI{
 
     while (result.next()) {
       val username = result.getString("username")
-      val timestamp = result.getLong("timestamp")
+      val timestamp = result.getString("timestamp")
       queue = new StudentInQueue(username, timestamp) :: queue
     }
 
